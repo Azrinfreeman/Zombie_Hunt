@@ -34,4 +34,22 @@ public class AmmoPiickup : MonoBehaviour
     {
         
     }
+
+    public void pickupAmmo()
+    {
+        if (mm7Box)
+        {
+
+            player.activeGun.GetAmmo7();
+            Destroy(gameObject);
+            collected = true;
+        }
+        else if (mm9Box)
+        {
+
+            player.activeGun.GetAmmo9();
+            Destroy(gameObject);
+            collected = true;
+        }
+    }
 }
