@@ -15,8 +15,9 @@ public class GunManager : MonoBehaviour
     public float fireCounter;
 
     public int currentAmmo, pickupAmount;
-   
-   
+
+    public bool glock;
+    public bool ak47;
     void Start()
     {
         ui = GameObject.Find("Canvas").GetComponent<UIController>();

@@ -75,7 +75,7 @@ public class pickupItem : MonoBehaviour
                 }else if (Pick.mm7Box)
                 {
 
-                    itemDescText.text = "9mm ammo for glock";
+                    itemDescText.text = "7mm ammo for AK47";
                 }
             }
         }else

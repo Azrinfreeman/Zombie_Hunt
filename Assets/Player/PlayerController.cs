@@ -100,7 +100,14 @@ public class PlayerController : MonoBehaviour
         {
             if (activeGun.fireCounter <=0)
             {
-                FireShot();
+                
+                
+                    FireShot();
+                
+
+
+
+
             }
         }
 
@@ -129,6 +136,16 @@ public class PlayerController : MonoBehaviour
 
             Instantiate(activeGun.bullet, firePoint.position, firePoint.rotation);
             activeGun.fireCounter = activeGun.fireRate;
+
+            if (activeGun.glock)
+            {
+                anim.SetTrigger("gShoot");
+            }
+            if (activeGun.ak47)
+            {
+                anim.SetTrigger("ak47Shoot");
+            }
+
             ui.ammoText.text = "" + activeGun.currentAmmo.ToString();
         }
 
@@ -143,6 +160,7 @@ public class PlayerController : MonoBehaviour
 
         activeGun = allGuns[currentGun];
         activeGun.gameObject.SetActive(true);
+        
         ui.ammoText.text = "" + activeGun.currentAmmo.ToString();
     }
 
