@@ -34,6 +34,13 @@ public class PlayerController : MonoBehaviour
 
     public List<GunManager> allGuns = new List<GunManager>();
     public int currentGun;
+
+
+
+    //collider
+
+    
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -79,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
 
         //single shot or tap fire
-        if (Input.GetMouseButtonDown(0) && activeGun.fireCounter <=0)
+        if (Input.GetMouseButtonDown(0) && activeGun.fireCounter <=0 && !activeGun.crowbar)
         {
             RaycastHit hit;
             if (Physics.Raycast(camTrans.position, camTrans.transform.forward, out hit, 50f))
@@ -92,6 +99,11 @@ public class PlayerController : MonoBehaviour
             }
             // Instantiate(bullet, firePoint.position + (transform.forward * (-speed * Time.deltaTime)), firePoint.rotation);
             FireShot();
+        }else if (Input.GetMouseButtonDown(0) && activeGun.crowbar)
+        {
+           
+            MeleeAttack();
+
         }
 
 
@@ -100,22 +112,23 @@ public class PlayerController : MonoBehaviour
         {
             if (activeGun.fireCounter <=0)
             {
-                
-                
-                    FireShot();
-                
-
-
-
+                 FireShot();
 
             }
         }
 
+
+
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            SwitchGun(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             SwitchGun(1); 
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             SwitchGun(2);
         }
@@ -128,7 +141,8 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    public void FireShot()
+    public void 
+        FireShot()
     {
         if (activeGun.currentAmmo > 0)
         {
@@ -140,6 +154,8 @@ public class PlayerController : MonoBehaviour
             if (activeGun.glock)
             {
                 anim.SetTrigger("gShoot");
+               
+                
             }
             if (activeGun.ak47)
             {
@@ -147,7 +163,35 @@ public class PlayerController : MonoBehaviour
             }
 
             ui.ammoText.text = "" + activeGun.currentAmmo.ToString();
+            activeGun.bulletFire.PlayOneShot(activeGun.bulletFire.clip);
+
         }
+
+    }
+
+    public void MeleeAttack()
+    {
+        if (activeGun.crowbar)
+        {
+            BoxCollider crowbar = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<BoxCollider>();
+            crowbar.enabled = !crowbar.enabled;
+            anim.SetTrigger("crowbarAttack");
+            StartCoroutine(Waitt(0.4f));
+           
+        }
+        
+
+    }
+
+    private IEnumerator Waitt(float waitTime)
+    {
+        BoxCollider crowbar = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<BoxCollider>();
+        if (!activeGun.bulletFire.isPlaying) 
+        {
+            activeGun.bulletFire.Play();
+        }
+        yield return new WaitForSeconds(waitTime);
+        crowbar.enabled = !crowbar.enabled;
 
     }
 
