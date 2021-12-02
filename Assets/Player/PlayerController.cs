@@ -38,9 +38,12 @@ public class PlayerController : MonoBehaviour
 
 
     //collider
+    private void Awake()
+    {
+        instance = this;
+    }
 
-    
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,7 +52,10 @@ public class PlayerController : MonoBehaviour
 
         activeGun = allGuns[currentGun];
         activeGun.gameObject.SetActive(true);
-        ui.ammoText.text = "" + activeGun.currentAmmo.ToString();
+        ui = GameObject.Find("Canvas").GetComponent<UIController>();
+        ui.maxAmmoText.text = "" + activeGun.maxAmmo.ToString();
+        ui.currentAmmoText.text = "" + activeGun.currentAmmo.ToString();
+
     }
 
     // Update is called once per frame
@@ -162,12 +168,48 @@ public class PlayerController : MonoBehaviour
                 anim.SetTrigger("ak47Shoot");
             }
 
-            ui.ammoText.text = "" + activeGun.currentAmmo.ToString();
+            ui.currentAmmoText.text = "" + activeGun.currentAmmo.ToString();
+           
             activeGun.bulletFire.PlayOneShot(activeGun.bulletFire.clip);
+
+        }else if (activeGun.currentAmmo == 0)
+        {
+            //reloading
+            if (activeGun.glock)
+            {
+                if (activeGun.maxAmmo > 10)
+                {
+                    activeGun.currentAmmo = 10;
+                    activeGun.maxAmmo -= 10;
+                }
+                else if (activeGun.maxAmmo <= 10)
+                {
+                    activeGun.currentAmmo = activeGun.maxAmmo;
+                    activeGun.maxAmmo = 0;
+
+                }
+            }
+            else if (activeGun.ak47)
+            {
+                if (activeGun.maxAmmo > 30)
+                {
+                    activeGun.currentAmmo = 30;
+                    activeGun.maxAmmo -= 30;
+                }
+                else if (activeGun.maxAmmo <= 30)
+                {
+                    activeGun.currentAmmo = activeGun.maxAmmo;
+                    activeGun.maxAmmo = 0;
+
+                }
+            }
+            ui.currentAmmoText.text = "" + activeGun.currentAmmo.ToString();
+            ui.maxAmmoText.text = "" + activeGun.maxAmmo.ToString();
 
         }
 
     }
+
 
     public void MeleeAttack()
     {
@@ -205,7 +247,8 @@ public class PlayerController : MonoBehaviour
         activeGun = allGuns[currentGun];
         activeGun.gameObject.SetActive(true);
         
-        ui.ammoText.text = "" + activeGun.currentAmmo.ToString();
+        ui.maxAmmoText.text = "" + activeGun.maxAmmo.ToString();
+        ui.currentAmmoText.text = "" + activeGun.currentAmmo.ToString();
     }
 
 

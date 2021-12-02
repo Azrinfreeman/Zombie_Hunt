@@ -7,7 +7,9 @@ public class UIController : MonoBehaviour
 {
     public static UIController instance;
 
-    public Text ammoText;
+    public Text currentAmmoText;
+    public Text maxAmmoText;
+    
     public TextMeshProUGUI detailCollected;
     public Animator uiAnim;
     void Start()

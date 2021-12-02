@@ -14,7 +14,13 @@ public class GunManager : MonoBehaviour
     [HideInInspector]
     public float fireCounter;
 
-    public int currentAmmo, pickupAmount;
+    public int currentAmmo,maxAmmo, pickupAmount;
+
+    // max ammo = 100
+    // current ammo = max ammo - minus
+
+    // minus = 20;
+
 
     public bool crowbar;
     public bool glock;
@@ -38,14 +44,18 @@ public class GunManager : MonoBehaviour
 
     public void GetAmmo7()
     { 
-            player.allGuns[2].currentAmmo += pickupAmount;
-            ui.ammoText.text = "" + player.activeGun.currentAmmo.ToString();
+            player.allGuns[2].maxAmmo += pickupAmount;
+            ui.maxAmmoText.text = "" + player.allGuns[2].maxAmmo.ToString();
+        ui.currentAmmoText.text = "" + player.allGuns[2].currentAmmo.ToString();
     }
+
+    
 
     public void GetAmmo9()
     {
 
-        player.allGuns[1].currentAmmo += pickupAmount;
-        ui.ammoText.text = "" + player.activeGun.currentAmmo.ToString();
+        player.allGuns[1].maxAmmo += pickupAmount;
+        ui.currentAmmoText.text = "" + player.allGuns[1].currentAmmo.ToString();
+        ui.maxAmmoText.text = "" + player.allGuns[1].maxAmmo.ToString();
     }
 }

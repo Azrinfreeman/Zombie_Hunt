@@ -9,7 +9,7 @@ public class AmmoPiickup : MonoBehaviour
    
     public UIController ui;
     public PlayerController player;
-    
+    public AudioSource audioPick;
 
     public bool collected;
 
@@ -20,18 +20,22 @@ public class AmmoPiickup : MonoBehaviour
     {
         if (other.tag == "Player" && !collected && mm7Box)
         {
-            player.activeGun.GetAmmo7();
-            Destroy(gameObject);
-            ui.detailCollected.text = "+30 "+"AK ammo collected";
+            player.allGuns[2].GetAmmo7();
+           
+            ui.detailCollected.text += "+30 "+"AK ammo collected\n";
             ui.uiAnim.SetTrigger("isFading");
+            audioPick.PlayOneShot(audioPick.clip);
+            Destroy(gameObject);
             collected = true;
         }
-        if (other.tag == "Player" && !collected && mm9Box)
+        else if (other.tag == "Player" && !collected && mm9Box)
         {
-            player.activeGun.GetAmmo9();
-            Destroy(gameObject);
-            ui.detailCollected.text = "+15 " + "Pistol ammo collected";
+            player.allGuns[1].GetAmmo9();
+           
+            ui.detailCollected.text += "+15 " + "Pistol ammo collected\n";
             ui.uiAnim.SetTrigger("isFading");
+            audioPick.PlayOneShot(audioPick.clip);
+            Destroy(gameObject);
             collected = true;
         }
     }
@@ -39,7 +43,7 @@ public class AmmoPiickup : MonoBehaviour
     {
         ui = GameObject.Find("Canvas").GetComponent<UIController>();
         player = GameObject.Find("player").GetComponent<PlayerController>();
-       
+        audioPick = GameObject.Find("audio_pickup").GetComponent<AudioSource>();
        
     }
 
@@ -54,24 +58,28 @@ public class AmmoPiickup : MonoBehaviour
         if (mm7Box)
         {
 
-            player.activeGun.GetAmmo7();
-            Destroy(gameObject);
+            player.allGuns[2].GetAmmo7();
+            
             ui.detailCollected.text += "+30 " + "AK ammo collected\n";
            
             ui.uiAnim.SetTrigger("isFading");
-            
+            audioPick.PlayOneShot(audioPick.clip) ;
+            Debug.Log("audio played");
+            Destroy(gameObject);
             collected = true;
             
         }
         else if (mm9Box)
         {
 
-            player.activeGun.GetAmmo9();
-            Destroy(gameObject);
+            player.allGuns[1].GetAmmo9();
+            
             ui.detailCollected.text += "+15 " + "Pistol ammo collected\n";
            
             ui.uiAnim.SetTrigger("isFading");
-            
+            audioPick.PlayOneShot(audioPick.clip);
+            Debug.Log("audio played");
+            Destroy(gameObject);
             collected = true;
            
         }
