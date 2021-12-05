@@ -95,6 +95,11 @@ public class pickupItem : MonoBehaviour
                     itemDescText.text = "AK47";
 
                 }
+                if (Pick.machete)
+                {
+                    itemDescText.text = "Machete";
+
+                }
             }
         }else
         {

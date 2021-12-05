@@ -31,6 +31,16 @@ public class WeaponPickup : MonoBehaviour
 
             collected = true;
         }
+        else if (other.tag == "Player" && !collected && theGun == "machete")
+        {
+            PlayerController.instance.AddGun(theGun);
+            ui.detailCollected.text += "Machete";
+            ui.uiAnim.SetTrigger("isFading");
+            audioPick.PlayOneShot(audioPick.clip);
+            Destroy(gameObject);
+
+            collected = true;
+        }
     }
 
     // Start is called before the first frame update
@@ -60,6 +70,16 @@ public class WeaponPickup : MonoBehaviour
         {
             PlayerController.instance.AddGun(theGun);
             ui.detailCollected.text += "AK47";
+            ui.uiAnim.SetTrigger("isFading");
+            audioPick.PlayOneShot(audioPick.clip);
+            Destroy(gameObject);
+
+            collected = true;
+        }else if (theGun == "machete")
+        {
+
+            PlayerController.instance.AddGun(theGun);
+            ui.detailCollected.text += "machete";
             ui.uiAnim.SetTrigger("isFading");
             audioPick.PlayOneShot(audioPick.clip);
             Destroy(gameObject);

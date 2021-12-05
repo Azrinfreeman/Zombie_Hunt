@@ -23,7 +23,15 @@ public class EnemyHealth : MonoBehaviour
         currentHealth -=damageTaken;
         if (currentHealth <=0)
         {
-            Destroy(gameObject);
+            StartCoroutine(death());
         }
+    }
+
+
+    private IEnumerator death()
+    {
+        yield return new WaitForSeconds(4f);
+
+        Destroy(gameObject);
     }
 }

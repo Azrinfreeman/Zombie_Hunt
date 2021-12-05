@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
 
 
         //single shot or tap fire
-        if (Input.GetMouseButtonDown(0) && activeGun.fireCounter <=0 && !activeGun.crowbar)
+        if (Input.GetMouseButtonDown(0) && activeGun.fireCounter <=0 && !activeGun.manchete && !activeGun.crowbar)
         {
             RaycastHit hit;
             if (Physics.Raycast(camTrans.position, camTrans.transform.forward, out hit, 50f))
@@ -110,11 +110,14 @@ public class PlayerController : MonoBehaviour
             }
             // Instantiate(bullet, firePoint.position + (transform.forward * (-speed * Time.deltaTime)), firePoint.rotation);
             FireShot();
-        }else if (Input.GetMouseButtonDown(0) && activeGun.crowbar)
+        }else if (Input.GetMouseButtonDown(0) && activeGun.manchete && !anim.GetCurrentAnimatorStateInfo(0).IsTag("machete_attack"))
         {
            
-            MeleeAttack();
+            MeleeAttackMachete();
 
+        }else if (Input.GetMouseButtonDown(0) && activeGun.crowbar && !anim.GetCurrentAnimatorStateInfo(0).IsTag("crowbarAttack"))
+        {
+            MeleeAttack();
         }
 
 
@@ -148,6 +151,15 @@ public class PlayerController : MonoBehaviour
             } 
         }
 
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed += 15; 
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed -= 15;
+        }
 
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -232,16 +244,28 @@ public class PlayerController : MonoBehaviour
 
     public void MeleeAttack()
     {
-        if (activeGun.crowbar)
+        if (activeGun.crowbar )
         {
-            BoxCollider crowbar = transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<BoxCollider>();
-            crowbar.enabled = !crowbar.enabled;
+        
             anim.SetTrigger("crowbarAttack");
-            StartCoroutine(Waitt(0.4f));
+            StartCoroutine(Waitt(0.5f));
            
         }
-        
 
+
+
+    }
+
+    public void MeleeAttackMachete()
+    {
+        if (activeGun.manchete && !anim.GetCurrentAnimatorStateInfo(0).IsTag("machete_attack"))
+        {
+          
+         
+            anim.SetTrigger("macheteAttack");
+            StartCoroutine(Waitt2(0.5f));
+
+        }
     }
 
     private IEnumerator Waitt(float waitTime)
@@ -250,9 +274,23 @@ public class PlayerController : MonoBehaviour
         if (!activeGun.bulletFire.isPlaying) 
         {
             activeGun.bulletFire.Play();
+            crowbar.enabled = !crowbar.enabled;
         }
         yield return new WaitForSeconds(waitTime);
         crowbar.enabled = !crowbar.enabled;
+
+    }
+    private IEnumerator Waitt2(float waitTime)
+    {
+        BoxCollider man = transform.GetChild(0).GetChild(0).GetChild(3).GetChild(0).GetComponent<BoxCollider>();
+
+        if (!activeGun.bulletFire.isPlaying)
+        {
+            activeGun.bulletFire.Play();
+            man.enabled = !man.enabled;
+        }
+        yield return new WaitForSeconds(waitTime);
+        man.enabled = !man.enabled;
 
     }
     private IEnumerator ReloadAK47(float waitTime)
@@ -344,6 +382,10 @@ public class PlayerController : MonoBehaviour
                     {
                         activeGun.currentAmmo = 0;
                         activeGun.maxAmmo = 0;
+                    } else if (activeGun.currentAmmo == 0 && activeGun.maxAmmo > 0)
+                    {
+                        activeGun.maxAmmo -= 15;
+                        activeGun.currentAmmo += 15;
                     }
                     else
                     {

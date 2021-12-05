@@ -17,6 +17,7 @@ public class AmmoPiickup : MonoBehaviour
     public bool mm7Box;
     public bool glock;
     public bool ak47;
+    public bool machete;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -92,10 +93,20 @@ public class AmmoPiickup : MonoBehaviour
             audioPick.PlayOneShot(audioPick.clip);
             Destroy(gameObject);
             collected = true;
-        }else if (ak47)
+        }
+        else if (ak47)
         {
             PlayerController.instance.AddGun("ak47");
             ui.detailCollected.text += "AK47\n";
+            ui.uiAnim.SetTrigger("isFading");
+            audioPick.PlayOneShot(audioPick.clip);
+            Destroy(gameObject);
+            collected = true;
+        }
+        else if (machete)
+        {
+            PlayerController.instance.AddGun("machete");
+            ui.detailCollected.text += "Machete\n";
             ui.uiAnim.SetTrigger("isFading");
             audioPick.PlayOneShot(audioPick.clip);
             Destroy(gameObject);

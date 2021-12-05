@@ -23,6 +23,7 @@ public class GunManager : MonoBehaviour
 
 
     public bool crowbar;
+    public bool manchete;
     public bool glock;
     public bool ak47;
 
