@@ -17,6 +17,7 @@ public class pickupItem : MonoBehaviour
 
 
     private Item itemBeingPickup;
+    public WeaponPickup wPick;
     public AmmoPiickup Pick;
     void Start()
     {
@@ -34,6 +35,7 @@ public class pickupItem : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 Pick.pickupAmmo();
+                
             }
             else
             {
@@ -55,13 +57,14 @@ public class pickupItem : MonoBehaviour
     private void SelectItemBeingPickupUpFromRay()
     {
         Ray ray = camera.ViewportPointToRay(Vector3.one / 2f);
-        Debug.DrawRay(ray.origin, ray.direction * 2f, Color.red);
+        Debug.DrawRay(ray.origin, ray.direction * 18f, Color.red);
         RaycastHit hitInfo;
-        if(Physics.Raycast(ray, out hitInfo, 1.3f, layerMask))
+        if(Physics.Raycast(ray, out hitInfo, 18f, layerMask))
         {
             var HitItem = hitInfo.collider.GetComponent<Item>();
 
             Pick = hitInfo.collider.GetComponent<AmmoPiickup>();
+            
             if(HitItem == null)
             {
                 itemBeingPickup = null;
@@ -69,13 +72,28 @@ public class pickupItem : MonoBehaviour
             else if(HitItem != null && HitItem != itemBeingPickup)
             {
                 itemBeingPickup = HitItem;
+               
+             
+                
                 if (Pick.mm9Box)
                 {
-                    itemDescText.text = "9mm ammo for glock";
-                }else if (Pick.mm7Box)
+                    itemDescText.text = "Glock Ammo";
+                }
+                if (Pick.mm7Box)
                 {
 
-                    itemDescText.text = "7mm ammo for AK47";
+                    
+                    itemDescText.text = "AK47 Ammo";
+                }
+                if (Pick.glock)
+                {
+                    itemDescText.text = "Glock Pistol";
+
+                }
+                if (Pick.ak47)
+                {
+                    itemDescText.text = "AK47";
+
                 }
             }
         }else

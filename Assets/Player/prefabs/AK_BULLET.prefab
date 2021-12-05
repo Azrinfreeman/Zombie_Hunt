@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a36f2cad6d763d4886253d65946a74a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 20
+  moveSpeed: 120
   lifeTime: 15
   theRB: {fileID: 1389678248689360245}
   impactEffect: {fileID: 3916426788225214237, guid: b676995508792444d896be1630c1a2c5, type: 3}

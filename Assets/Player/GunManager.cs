@@ -26,6 +26,8 @@ public class GunManager : MonoBehaviour
     public bool glock;
     public bool ak47;
 
+    public string gunName;
+
     public AudioSource bulletFire;
     void Start()
     {
@@ -45,8 +47,13 @@ public class GunManager : MonoBehaviour
     public void GetAmmo7()
     { 
             player.allGuns[2].maxAmmo += pickupAmount;
+        if (player.activeGun.ak47)
+        {
+
             ui.maxAmmoText.text = "" + player.allGuns[2].maxAmmo.ToString();
-        ui.currentAmmoText.text = "" + player.allGuns[2].currentAmmo.ToString();
+            ui.currentAmmoText.text = "" + player.allGuns[2].currentAmmo.ToString();
+
+        }
     }
 
     
@@ -55,7 +62,11 @@ public class GunManager : MonoBehaviour
     {
 
         player.allGuns[1].maxAmmo += pickupAmount;
-        ui.currentAmmoText.text = "" + player.allGuns[1].currentAmmo.ToString();
-        ui.maxAmmoText.text = "" + player.allGuns[1].maxAmmo.ToString();
+        if (player.activeGun.glock)
+        {
+            ui.currentAmmoText.text = "" + player.allGuns[1].currentAmmo.ToString();
+            ui.maxAmmoText.text = "" + player.allGuns[1].maxAmmo.ToString();
+
+        }
     }
 }

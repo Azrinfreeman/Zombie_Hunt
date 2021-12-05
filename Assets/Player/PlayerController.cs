@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     public float mouseSensitivity = 7f;
 
     //bullets
+    private int glockShootCounter = 0;
+    private int ak47ShootCounter = 0;
 
  //   public GameObject bullet;
     public Transform firePoint;
@@ -33,6 +35,7 @@ public class PlayerController : MonoBehaviour
     public UIController ui;
 
     public List<GunManager> allGuns = new List<GunManager>();
+    public List<GunManager> unlockableGuns = new List<GunManager>();
     public int currentGun;
 
 
@@ -41,6 +44,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        currentGun = 0;
+        
     }
 
 
@@ -124,19 +129,47 @@ public class PlayerController : MonoBehaviour
         }
 
 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsTag("GlockReloading"))
+            {
+                //reloading
+                if (activeGun.glock)
+                {
+                    StartCoroutine(ReloadGlock(1.2f));
+
+                }
+                else if (activeGun.ak47)
+                {
+                    StartCoroutine(ReloadAK47(1.2f)); 
+                }
+
+
+            } 
+        }
+
 
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            
             SwitchGun(0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            SwitchGun(1); 
+            if (allGuns.Count >=2)
+            {
+              
+                SwitchGun(1);
+            } 
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            SwitchGun(2);
+            if (allGuns.Count >=3)
+            {
+           
+                SwitchGun(2);
+            }
         }
 
         anim.SetFloat("moveSpeed", move.magnitude);
@@ -150,21 +183,25 @@ public class PlayerController : MonoBehaviour
     public void 
         FireShot()
     {
+        // when bullets available
         if (activeGun.currentAmmo > 0)
         {
             activeGun.currentAmmo--;
-
+            
             Instantiate(activeGun.bullet, firePoint.position, firePoint.rotation);
             activeGun.fireCounter = activeGun.fireRate;
 
             if (activeGun.glock)
             {
+                glockShootCounter++;
+                Debug.Log(glockShootCounter);
                 anim.SetTrigger("gShoot");
                
                 
             }
             if (activeGun.ak47)
             {
+                ak47ShootCounter++;
                 anim.SetTrigger("ak47Shoot");
             }
 
@@ -172,39 +209,21 @@ public class PlayerController : MonoBehaviour
            
             activeGun.bulletFire.PlayOneShot(activeGun.bulletFire.clip);
 
+
+            // ouch no bullets
         }else if (activeGun.currentAmmo == 0)
         {
             //reloading
             if (activeGun.glock)
             {
-                if (activeGun.maxAmmo > 10)
-                {
-                    activeGun.currentAmmo = 10;
-                    activeGun.maxAmmo -= 10;
-                }
-                else if (activeGun.maxAmmo <= 10)
-                {
-                    activeGun.currentAmmo = activeGun.maxAmmo;
-                    activeGun.maxAmmo = 0;
+                StartCoroutine(ReloadGlock(1.2f));
 
-                }
             }
             else if (activeGun.ak47)
             {
-                if (activeGun.maxAmmo > 30)
-                {
-                    activeGun.currentAmmo = 30;
-                    activeGun.maxAmmo -= 30;
-                }
-                else if (activeGun.maxAmmo <= 30)
-                {
-                    activeGun.currentAmmo = activeGun.maxAmmo;
-                    activeGun.maxAmmo = 0;
-
-                }
+                StartCoroutine(ReloadAK47(1.2f));
             }
-            ui.currentAmmoText.text = "" + activeGun.currentAmmo.ToString();
-            ui.maxAmmoText.text = "" + activeGun.maxAmmo.ToString();
+            
 
         }
 
@@ -236,21 +255,158 @@ public class PlayerController : MonoBehaviour
         crowbar.enabled = !crowbar.enabled;
 
     }
+    private IEnumerator ReloadAK47(float waitTime)
+    {
+        if (activeGun.maxAmmo > 0)
+        {
+            
 
-    public void SwitchGun(int number)
+            if (activeGun.currentAmmo < 30)
+            {
+
+
+                anim.SetTrigger("ak47Reload");
+                yield return new WaitForSeconds(waitTime);
+                if (activeGun.maxAmmo < 0)
+                {
+                    activeGun.currentAmmo = 0;
+                    activeGun.maxAmmo = 0;
+
+                }
+                else
+                {
+
+                    if (ak47ShootCounter > activeGun.maxAmmo)
+                    {
+
+                        Debug.Log(activeGun.currentAmmo + "enter here ");
+                        Debug.Log(activeGun.maxAmmo + "max here ");
+                        activeGun.currentAmmo += activeGun.maxAmmo;
+                        activeGun.maxAmmo = 0;
+                    }
+
+                    else if (activeGun.maxAmmo <= 0)
+                    {
+                        activeGun.currentAmmo = 0;
+                        activeGun.maxAmmo = 0;
+                    }
+                    else
+                    {
+                        activeGun.currentAmmo += ak47ShootCounter;
+                        activeGun.maxAmmo -= ak47ShootCounter;
+
+                    }
+                }
+
+            }
+        }
+        ak47ShootCounter = 0;
+        ui.currentAmmoText.text = "" + activeGun.currentAmmo.ToString();
+        ui.maxAmmoText.text = "" + activeGun.maxAmmo.ToString();
+    }
+    private IEnumerator ReloadGlock(float waitTime)
     {
         
-        activeGun.gameObject.SetActive(false);
+
+        if (activeGun.maxAmmo > 0) {
+          
+           
+            if (activeGun.currentAmmo < 10)
+            {
+
+                anim.SetTrigger("gReload");
+                yield return new WaitForSeconds(waitTime);
+
+
+                if (activeGun.maxAmmo < 0)
+                {
+                    activeGun.currentAmmo =0;
+                    activeGun.maxAmmo = 0;
+
+                }
+                else
+                {
+                   
+                   
+                    
+
+
+                    if (glockShootCounter > activeGun.maxAmmo)
+                    {
+                    
+                        Debug.Log(activeGun.currentAmmo + "enter here ");
+                        Debug.Log(activeGun.maxAmmo + "max here ");
+                        activeGun.currentAmmo += activeGun.maxAmmo;
+                        activeGun.maxAmmo = 0;
+                    }
+
+                    else if (activeGun.maxAmmo <=0 )
+                    {
+                        activeGun.currentAmmo = 0;
+                        activeGun.maxAmmo = 0;
+                    }
+                    else
+                    {
+                        activeGun.currentAmmo += glockShootCounter;
+                        activeGun.maxAmmo -= glockShootCounter;
+
+                    }
+                }
+
+
+            }
+        }
+     
+       
+        glockShootCounter = 0;
+        ui.currentAmmoText.text = "" + activeGun.currentAmmo.ToString();
+        ui.maxAmmoText.text = "" + activeGun.maxAmmo.ToString();
+    }
+    public void SwitchGun(int number)
+    {
+
+        for (int i = 0; i < allGuns.Count; i++)
+        {
+            allGuns[i].gameObject.SetActive(false);
+        }
 
         currentGun = number;
 
         activeGun = allGuns[currentGun];
         activeGun.gameObject.SetActive(true);
+
+
         
         ui.maxAmmoText.text = "" + activeGun.maxAmmo.ToString();
         ui.currentAmmoText.text = "" + activeGun.currentAmmo.ToString();
     }
 
 
+    public void AddGun(string gunToAdd)
+    {
+        bool gunUnlocked = false;
+
+        if (unlockableGuns.Count >0)
+        {
+            for (int i =0; i < unlockableGuns.Count; i++)
+            {
+                if (unlockableGuns[i].gunName == gunToAdd)
+                {
+                    gunUnlocked = true;
+                    allGuns.Add(unlockableGuns[i]);
+                    unlockableGuns.RemoveAt(i);
+
+                    i = unlockableGuns.Count;
+                }
+            }
+
+        }
+
+        if (gunUnlocked)
+        {
+            currentGun = allGuns.Count -1 ;
+            SwitchGun(currentGun);
+        }
+    }
 
 }

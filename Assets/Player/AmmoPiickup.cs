@@ -15,6 +15,8 @@ public class AmmoPiickup : MonoBehaviour
 
     public bool mm9Box;
     public bool mm7Box;
+    public bool glock;
+    public bool ak47;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -59,32 +61,48 @@ public class AmmoPiickup : MonoBehaviour
         {
 
             player.allGuns[2].GetAmmo7();
-            
-            ui.detailCollected.text += "+30 " + "AK ammo collected\n";
-           
-            ui.uiAnim.SetTrigger("isFading");
-            audioPick.PlayOneShot(audioPick.clip) ;
-            Debug.Log("audio played");
-            Destroy(gameObject);
-            collected = true;
-            
-        }
-        else if (mm9Box)
-        {
 
-            player.allGuns[1].GetAmmo9();
-            
-            ui.detailCollected.text += "+15 " + "Pistol ammo collected\n";
-           
+            ui.detailCollected.text += "+30 " + "AK ammo collected\n";
+
             ui.uiAnim.SetTrigger("isFading");
             audioPick.PlayOneShot(audioPick.clip);
             Debug.Log("audio played");
             Destroy(gameObject);
             collected = true;
-           
+
         }
-       
-        
+        else if (mm9Box)
+        {
+
+            player.allGuns[1].GetAmmo9();
+
+            ui.detailCollected.text += "+15 " + "Pistol ammo collected\n";
+
+            ui.uiAnim.SetTrigger("isFading");
+            audioPick.PlayOneShot(audioPick.clip);
+            Debug.Log("audio played");
+            Destroy(gameObject);
+            collected = true;
+
+        } else if (glock)
+        {
+            PlayerController.instance.AddGun("glock");
+            ui.detailCollected.text += "Glock Pistol\n";
+            ui.uiAnim.SetTrigger("isFading");
+            audioPick.PlayOneShot(audioPick.clip);
+            Destroy(gameObject);
+            collected = true;
+        }else if (ak47)
+        {
+            PlayerController.instance.AddGun("ak47");
+            ui.detailCollected.text += "AK47\n";
+            ui.uiAnim.SetTrigger("isFading");
+            audioPick.PlayOneShot(audioPick.clip);
+            Destroy(gameObject);
+            collected = true;
+        }
+
+
     }
 
    
