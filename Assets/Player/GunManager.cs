@@ -30,10 +30,28 @@ public class GunManager : MonoBehaviour
     public string gunName;
 
     public AudioSource bulletFire;
+    public AudioSource reload;
     void Start()
     {
         ui = GameObject.Find("Canvas").GetComponent<UIController>();
         player = GameObject.Find("player").GetComponent<PlayerController>();
+
+        reload = GameObject.Find("weapon-reload").GetComponent<AudioSource>();
+        if (crowbar || manchete)
+        {
+            bulletFire = GameObject.Find("whoosh").GetComponent<AudioSource>();
+        }
+
+        if (glock)
+        {
+            bulletFire = GameObject.Find("GlockFire").GetComponent<AudioSource>();
+        }
+        if (ak47)
+        {
+            bulletFire = GameObject.Find("AK47").GetComponent<AudioSource>();
+        }
+
+
     }
 
     // Update is called once per frame

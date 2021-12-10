@@ -18,6 +18,7 @@ public class AmmoPiickup : MonoBehaviour
     public bool glock;
     public bool ak47;
     public bool machete;
+    public bool healthPickup;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -71,6 +72,16 @@ public class AmmoPiickup : MonoBehaviour
             Destroy(gameObject);
             collected = true;
 
+        }
+        else if (healthPickup)
+        {
+
+            PlayerHealthController.instance.HealthIncrease(30);
+            ui.detailCollected.text += "+30 Health\n";
+            ui.uiAnim.SetTrigger("isFading");
+            audioPick.PlayOneShot(audioPick.clip);
+            Destroy(gameObject);
+            collected = true;
         }
         else if (mm9Box)
         {

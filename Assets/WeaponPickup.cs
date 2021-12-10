@@ -46,7 +46,8 @@ public class WeaponPickup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        ui = GameObject.Find("Canvas").GetComponent<UIController>();
+        audioPick = GameObject.Find("audio_pickup").GetComponent<AudioSource>();
     }
 
     // Update is called once per frame

@@ -19,9 +19,14 @@ public class pickupItem : MonoBehaviour
     private Item itemBeingPickup;
     public WeaponPickup wPick;
     public AmmoPiickup Pick;
+    
+
+
+
     void Start()
     {
-        
+     //   itemDescText = GameObject.Find("itemDetails").GetComponent<TextMeshProUGUI>();
+      //  itemPromptRoot = GameObject.Find("itemPrompt").GetComponent<RectTransform>();
     }
 
     // Update is called once per frame
@@ -64,7 +69,7 @@ public class pickupItem : MonoBehaviour
             var HitItem = hitInfo.collider.GetComponent<Item>();
 
             Pick = hitInfo.collider.GetComponent<AmmoPiickup>();
-            
+           
             if(HitItem == null)
             {
                 itemBeingPickup = null;
@@ -79,10 +84,13 @@ public class pickupItem : MonoBehaviour
                 {
                     itemDescText.text = "Glock Ammo";
                 }
+                if (Pick.healthPickup) 
+                {
+                    itemDescText.text = "Health";
+                }
                 if (Pick.mm7Box)
                 {
 
-                    
                     itemDescText.text = "AK47 Ammo";
                 }
                 if (Pick.glock)

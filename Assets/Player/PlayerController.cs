@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] CharacterController controller; 
     [SerializeField]private float speed = 12f;
 
+    public GameObject ObjectivePanel;
+
     public float gravity = -9.81f;
 
     public Transform groundCheck;
@@ -147,7 +149,7 @@ public class PlayerController : MonoBehaviour
                     StartCoroutine(ReloadAK47(1.2f)); 
                 }
 
-
+              
             } 
         }
 
@@ -161,6 +163,14 @@ public class PlayerController : MonoBehaviour
             speed -= 15;
         }
 
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            ObjectivePanel.SetActive(true);
+        }
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            ObjectivePanel.SetActive(false);
+        }
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -183,7 +193,14 @@ public class PlayerController : MonoBehaviour
                 SwitchGun(2);
             }
         }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            if (allGuns.Count >= 4)
+            {
 
+                SwitchGun(3);
+            }
+        }
         anim.SetFloat("moveSpeed", move.magnitude);
 
     }
@@ -235,8 +252,8 @@ public class PlayerController : MonoBehaviour
             {
                 StartCoroutine(ReloadAK47(1.2f));
             }
-            
 
+           // activeGun.reload.Play();
         }
 
     }
@@ -246,9 +263,13 @@ public class PlayerController : MonoBehaviour
     {
         if (activeGun.crowbar )
         {
-        
-            anim.SetTrigger("crowbarAttack");
-            StartCoroutine(Waitt(0.5f));
+
+            if (activeGun.fireCounter <=0)
+            {
+                anim.SetTrigger("crowbarAttack");
+                StartCoroutine(Waitt(0.5f));
+                activeGun.fireCounter = activeGun.fireRate;
+            }
            
         }
 
@@ -260,11 +281,14 @@ public class PlayerController : MonoBehaviour
     {
         if (activeGun.manchete && !anim.GetCurrentAnimatorStateInfo(0).IsTag("machete_attack"))
         {
-          
-         
-            anim.SetTrigger("macheteAttack");
-            StartCoroutine(Waitt2(0.5f));
 
+            if (activeGun.fireCounter <=0)
+            {
+
+                anim.SetTrigger("macheteAttack");
+                StartCoroutine(Waitt2(0.5f));
+                activeGun.fireCounter = activeGun.fireRate;
+            }
         }
     }
 
@@ -304,6 +328,7 @@ public class PlayerController : MonoBehaviour
 
 
                 anim.SetTrigger("ak47Reload");
+                activeGun.reload.Play();
                 yield return new WaitForSeconds(waitTime);
                 if (activeGun.maxAmmo < 0)
                 {
@@ -352,8 +377,7 @@ public class PlayerController : MonoBehaviour
             if (activeGun.currentAmmo < 10)
             {
 
-                anim.SetTrigger("gReload");
-                yield return new WaitForSeconds(waitTime);
+               
 
 
                 if (activeGun.maxAmmo < 0)
@@ -364,10 +388,12 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                   
-                   
-                    
 
+
+
+                    anim.SetTrigger("gReload");
+                    activeGun.reload.Play();
+                    yield return new WaitForSeconds(waitTime);
 
                     if (glockShootCounter > activeGun.maxAmmo)
                     {
@@ -384,8 +410,8 @@ public class PlayerController : MonoBehaviour
                         activeGun.maxAmmo = 0;
                     } else if (activeGun.currentAmmo == 0 && activeGun.maxAmmo > 0)
                     {
-                        activeGun.maxAmmo -= 15;
-                        activeGun.currentAmmo += 15;
+                        activeGun.maxAmmo -= 10;
+                        activeGun.currentAmmo += 10;
                     }
                     else
                     {

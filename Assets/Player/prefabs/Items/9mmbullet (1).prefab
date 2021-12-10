@@ -117,6 +117,8 @@ MonoBehaviour:
   mm9Box: 1
   mm7Box: 0
   glock: 0
+  ak47: 0
+  machete: 0
 --- !u!114 &1601652379871527967
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -21,7 +21,16 @@ public class EnemyHealth : MonoBehaviour
     public void damageEnemy(int damageTaken)
     {
         currentHealth -=damageTaken;
-        if (currentHealth <=0)
+        if (currentHealth >0)
+        {
+            if (!EnemyController.instance.hitAudio.isPlaying)
+            {
+
+                EnemyController.instance.hitAudio.Play();
+
+            }
+        }
+        else if (currentHealth <=0)
         {
             StartCoroutine(death());
         }
@@ -30,7 +39,7 @@ public class EnemyHealth : MonoBehaviour
 
     private IEnumerator death()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(10f);
 
         Destroy(gameObject);
     }
