@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
+using TMPro;
 public class EnemyController : MonoBehaviour
 {
+    public int enemy; 
+
     public static EnemyController instance;
     public Animator anim;
     public float moveSpeed;
@@ -23,7 +27,10 @@ public class EnemyController : MonoBehaviour
     bool alreadyDead = false;
     public EnemyHealth enemyHealth;
 
-
+    [Space(10)]
+    public Slider healthSlider;
+    public TextMeshProUGUI bossName;
+    public GameObject rootSlider;
     private void Awake()
     {
         instance = this;
@@ -33,9 +40,38 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         enemyHealth = GetComponent<EnemyHealth>();
-        alertAudio = GameObject.Find("zombie-moan").GetComponent<AudioSource>();
-        deadAudio = GameObject.Find("zombie-dying").GetComponent<AudioSource>();
-        hitAudio = GameObject.Find("zombie-hit").GetComponent<AudioSource>();
+
+        if (enemy == 0)
+        {
+
+            alertAudio = GameObject.Find("zombie-moan").GetComponent<AudioSource>();
+            deadAudio = GameObject.Find("zombie-dying").GetComponent<AudioSource>();
+            hitAudio = GameObject.Find("zombie-hit").GetComponent<AudioSource>();
+
+        }
+        else if (enemy == 1)
+        {
+            rootSlider = GameObject.Find("bossHealth");
+            bossName = GameObject.Find("name").GetComponent<TextMeshProUGUI>();
+            healthSlider = GameObject.Find("bossHealth").GetComponent<Slider>();
+            alertAudio = GameObject.Find("boss1-alert").GetComponent<AudioSource>();
+            deadAudio = GameObject.Find("zombie-dying").GetComponent<AudioSource>();
+            hitAudio = GameObject.Find("zombie-hit").GetComponent<AudioSource>();
+
+            rootSlider.SetActive(false);
+
+        }
+        else if (enemy == 2)
+        {
+            rootSlider = GameObject.Find("bossHealth");
+            bossName = GameObject.Find("name").GetComponent<TextMeshProUGUI>();
+            healthSlider = GameObject.Find("bossHealth").GetComponent<Slider>();
+            alertAudio = GameObject.Find("werewolf-alert").GetComponent<AudioSource>();
+            hitAudio = GameObject.Find("werewolf-dying").GetComponent<AudioSource>();
+            deadAudio = GameObject.Find("werewolf-dying").GetComponent<AudioSource>();
+            healthSlider.maxValue = 40;
+            rootSlider.SetActive(false);
+        }
         startPoint = transform.position;
     }
 
@@ -63,6 +99,21 @@ public class EnemyController : MonoBehaviour
                     deadAudio.Play();
                 }
                 alreadyDead = true;
+                if (enemy == 1)
+                {
+                    EventController.instance.boss1Defeated = true;
+                    rootSlider.SetActive(false);
+                }
+                else if (enemy == 2)
+                {
+
+                    rootSlider.SetActive(false);
+                }
+                else if (enemy == 3)
+                {
+
+                    rootSlider.SetActive(false);
+                }
             }
             agent.destination = transform.position;
         }
@@ -93,6 +144,24 @@ public class EnemyController : MonoBehaviour
             }
             else
             {
+                if (enemy == 1)
+                {
+                    rootSlider.SetActive(true);
+                    bossName.text = "Special Infected";
+                    healthSlider.value = enemyHealth.currentHealth;
+                }else if (enemy == 2)
+                {
+
+                    rootSlider.SetActive(true);
+                    bossName.text = "Special Infected";
+                    healthSlider.value = enemyHealth.currentHealth;
+                }else if (enemy == 3)
+                {
+
+                    rootSlider.SetActive(true);
+                    bossName.text = "Special Infected";
+                    healthSlider.value = enemyHealth.currentHealth;
+                }
                 //transform.LookAt(targetPoint);
 
                 //theRB.velocity = transform.forward * moveSpeed;

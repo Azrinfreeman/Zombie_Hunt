@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     public int currentGun;
 
 
-
+    private bool toggle =false;
     //collider
     private void Awake()
     {
@@ -62,7 +62,8 @@ public class PlayerController : MonoBehaviour
         ui = GameObject.Find("Canvas").GetComponent<UIController>();
         ui.maxAmmoText.text = "" + activeGun.maxAmmo.ToString();
         ui.currentAmmoText.text = "" + activeGun.currentAmmo.ToString();
-
+        ObjectivePanel = GameObject.Find("ObjectivePanel");
+        ObjectivePanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -97,7 +98,20 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.up * mouseX);
         //handle shooting mouse 1 and 2 
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!toggle)
+            {
+                toggle = !toggle;
+                UIController.instance.PauseLevel();
+            }
+            else
+            {
+                toggle = !toggle;
 
+                UIController.instance.resumeLevel();
+            }
+        }
         //single shot or tap fire
         if (Input.GetMouseButtonDown(0) && activeGun.fireCounter <=0 && !activeGun.manchete && !activeGun.crowbar)
         {
@@ -165,7 +179,11 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            ObjectivePanel.SetActive(true);
+            if (!UIController.instance.pausePanel.activeSelf)
+            {
+
+                ObjectivePanel.SetActive(true);
+            }
         }
         if (Input.GetKeyUp(KeyCode.Tab))
         {

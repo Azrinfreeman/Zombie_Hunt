@@ -76,7 +76,8 @@ public class AmmoPiickup : MonoBehaviour
         else if (healthPickup)
         {
 
-            PlayerHealthController.instance.HealthIncrease(30);
+            PlayerHealthController.instance.HealthIncrease(30
+                );
             ui.detailCollected.text += "+30 Health\n";
             ui.uiAnim.SetTrigger("isFading");
             audioPick.PlayOneShot(audioPick.clip);

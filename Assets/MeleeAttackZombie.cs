@@ -12,6 +12,7 @@ public class MeleeAttackZombie : MonoBehaviour
     void Start()
     {
         firePoint = GetComponent<BoxCollider>();
+
         audioHurtng = GameObject.Find("PlayerHurt").GetComponent<AudioSource>();
     }
 
