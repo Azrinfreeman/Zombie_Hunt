@@ -86,7 +86,11 @@ public class pickupItem : MonoBehaviour
                 }
                 if (Pick.healthPickup) 
                 {
-                    itemDescText.text = "Health";
+                    itemDescText.text = "Pills";
+                }
+                if (Pick.medkitPickup)
+                {
+                    itemDescText.text = "Medkit";
                 }
                 if (Pick.mm7Box)
                 {

@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     public int currentGun;
 
 
-    private bool toggle =false;
+    public bool toggle =false;
     //collider
     private void Awake()
     {
@@ -88,18 +88,23 @@ public class PlayerController : MonoBehaviour
 
 
         //contropl camera rotation
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity ;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity ;
+        if (!UIController.instance.pausePanel.activeSelf)
+        {
 
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90, 90f);
+            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-        camTrans.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        transform.Rotate(Vector3.up * mouseX);
-        //handle shooting mouse 1 and 2 
+            xRotation -= mouseY;
+            xRotation = Mathf.Clamp(xRotation, -90, 90f);
+
+            camTrans.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            transform.Rotate(Vector3.up * mouseX);
+
+        }//handle shooting mouse 1 and 2 
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            
             if (!toggle)
             {
                 toggle = !toggle;
@@ -140,7 +145,7 @@ public class PlayerController : MonoBehaviour
         //rapid fire hold mouse
         if (Input.GetMouseButton(0) && activeGun.canAutoFire)
         {
-            if (activeGun.fireCounter <=0)
+            if (activeGun.fireCounter <=0 && !anim.GetCurrentAnimatorStateInfo(0).IsTag("akreload"))
             {
                  FireShot();
 
@@ -150,7 +155,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            if (!anim.GetCurrentAnimatorStateInfo(0).IsTag("GlockReloading"))
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsTag("GlockReloading") && !anim.GetCurrentAnimatorStateInfo(0).IsTag("akreload"))
             {
                 //reloading
                 if (activeGun.glock)
@@ -261,17 +266,26 @@ public class PlayerController : MonoBehaviour
         }else if (activeGun.currentAmmo == 0)
         {
             //reloading
-            if (activeGun.glock)
+
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsTag("GlockReloading") && !anim.GetCurrentAnimatorStateInfo(0).IsTag("akreload"))
             {
-                StartCoroutine(ReloadGlock(1.2f));
+
+                if (activeGun.glock)
+                {
+                    StartCoroutine(ReloadGlock(1.2f));
+
+                }
+                else if (activeGun.ak47)
+                {
+                    if (!anim.GetCurrentAnimatorStateInfo(0).IsTag("akreload"))
+                    {
+
+                        StartCoroutine(ReloadAK47(1.2f));
+                    }
+                }
 
             }
-            else if (activeGun.ak47)
-            {
-                StartCoroutine(ReloadAK47(1.2f));
-            }
-
-           // activeGun.reload.Play();
+            // activeGun.reload.Play();
         }
 
     }
@@ -337,10 +351,11 @@ public class PlayerController : MonoBehaviour
     }
     private IEnumerator ReloadAK47(float waitTime)
     {
-        if (activeGun.maxAmmo > 0)
+        if (activeGun.maxAmmo >= 0)
         {
-            
+            Debug.Log("ReloadAK47");
 
+          
             if (activeGun.currentAmmo < 30)
             {
 
@@ -370,6 +385,11 @@ public class PlayerController : MonoBehaviour
                     {
                         activeGun.currentAmmo = 0;
                         activeGun.maxAmmo = 0;
+                    }
+                    else if (activeGun.currentAmmo == 0 && activeGun.maxAmmo > 0)
+                    {
+                        activeGun.maxAmmo -= 30;
+                        activeGun.currentAmmo += 30;
                     }
                     else
                     {

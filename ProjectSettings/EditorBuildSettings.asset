@@ -9,12 +9,33 @@ EditorBuildSettings:
     path: Assets/Scenes/Main.unity
     guid: 7f416487acaddce40b8e97e5e7802f87
   - enabled: 1
+    path: Assets/Scenes/cutscene1.unity
+    guid: 7dd0712fec6f1de4d991412e3bd760f4
+  - enabled: 1
     path: Assets/Scenes/level1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/cutscene1_1.unity
+    guid: 143bc4c4aef833443bd88fbfee5980d3
   - enabled: 1
     path: Assets/Scenes/level2.unity
     guid: 9843e46c0c64b824bbe9fbe2d39c7d1b
   - enabled: 1
+    path: Assets/Scenes/cutscene1_2.unity
+    guid: a45f9f8c594d0ef4bb0f77f165b8b593
+  - enabled: 1
     path: Assets/Scenes/level3.unity
     guid: b1324bf4cee038d43a7b12771e245f74
+  - enabled: 1
+    path: Assets/Scenes/cutscene_victory.unity
+    guid: b457d384f2b22884cb16e8ca816efb0f
+  - enabled: 1
+    path: Assets/Scenes/level1/GameOver1.unity
+    guid: 1d32ed9cd204f7e42bd167b38de8bc6c
+  - enabled: 1
+    path: Assets/Scenes/level2/GameOver2.unity
+    guid: 023cd08f0938d50429d6a67d559c4230
+  - enabled: 1
+    path: Assets/Scenes/level3/GameOver3.unity
+    guid: a5540b03e933a3543ac94fe4bcb878fe
   m_configObjects: {}

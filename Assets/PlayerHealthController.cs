@@ -1,20 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealthController : MonoBehaviour
 {
 
     public static PlayerHealthController instance;
-
-    public int maxHealth, currentHealth;
-    public float invicibleLength = 1f;
-    private float invicCounter;
     private void Awake()
     {
         instance = this;
     }
 
+
+    public int maxHealth, currentHealth;
+    public float invicibleLength = 1f;
+    private float invicCounter;
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +45,24 @@ public class PlayerHealthController : MonoBehaviour
             currentHealth -= damageAmount;
             invicCounter = invicibleLength;
 
+            if (currentHealth <= 0)
+            {
+                currentHealth = 0;
+                if (UIController.instance.level == 1)
+                {
+
+                    SceneManager.LoadScene("GameOver1");
+                }else if (UIController.instance.level == 2)
+                {
+
+                    SceneManager.LoadScene("GameOver2");
+                }
+                else if (UIController.instance.level == 3)
+                {
+
+                    SceneManager.LoadScene("GameOver3");
+                }
+            }
             UIController.instance.healthSlider.value = currentHealth;
             UIController.instance.healthText.text = currentHealth + " / " + maxHealth;
         }

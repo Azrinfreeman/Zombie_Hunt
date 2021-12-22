@@ -25,14 +25,14 @@ public class UIController : MonoBehaviour
 
     [Space(10)]
     public GameObject pausePanel;
-
+    public AudioSource clickSound;
     private void Awake()
     {
         instance = this;
     }
     void Start()
     {
-       
+        clickSound = GameObject.Find("buttonSelect").GetComponent<AudioSource>();
         detailCollected = GameObject.Find("collectedDetails").GetComponent<TextMeshProUGUI>();
         uiAnim = GameObject.Find("collectedDetails").GetComponent<Animator>();
         uiAnim.SetTrigger("isFading");
@@ -47,22 +47,30 @@ public class UIController : MonoBehaviour
         {
             objDesc.text = "-Walk along the blocked highway to find anything useful";
 
+        }else if (level == 3)
+        {
+            objDesc.text = "-Explore the residential area";
+
         }
     }
     public void PauseLevel()
     {
+        
         Cursor.lockState = CursorLockMode.Confined;
         Time.timeScale = 0;
         pausePanel.SetActive(true);
     }
     public void resumeLevel()
     {
+
+        clickSound.Play();
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1;
         pausePanel.SetActive(false);
     }
     public void restartLevel()
     {
+        clickSound.Play();
         Time.timeScale = 1;
         StartCoroutine(resetLevel());
     }
@@ -80,6 +88,7 @@ public class UIController : MonoBehaviour
 
     public void quitGame()
     {
+        clickSound.Play();
         Time.timeScale = 1;
         StartCoroutine(quitLevel());
     }

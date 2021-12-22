@@ -6,12 +6,12 @@ public class EnemyHealth : MonoBehaviour
 {
     public int currentHealth = 10;
 
-   
+    public EnemyController enemyHit;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        enemyHit = GetComponent<EnemyController>();
     }
 
     // Update is called once per frame
@@ -25,10 +25,10 @@ public class EnemyHealth : MonoBehaviour
         currentHealth -=damageTaken;
         if (currentHealth >0)
         {
-            if (!EnemyController.instance.hitAudio.isPlaying)
+            if (!enemyHit.hitAudio.isPlaying)
             {
 
-                EnemyController.instance.hitAudio.Play();
+                enemyHit.hitAudio.Play();
 
             }
         }

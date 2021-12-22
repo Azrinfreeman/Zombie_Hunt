@@ -31,6 +31,14 @@ public class EnemyController : MonoBehaviour
     public Slider healthSlider;
     public TextMeshProUGUI bossName;
     public GameObject rootSlider;
+
+    public EventController event1;
+
+    [Space(10)]
+
+    public GameObject arrow1;
+    public GameObject arrow2;
+    public GameObject arrowFinal;
     private void Awake()
     {
         instance = this;
@@ -51,6 +59,7 @@ public class EnemyController : MonoBehaviour
         }
         else if (enemy == 1)
         {
+            event1 = GameObject.Find("DoorEvent").GetComponent<EventController>();
             rootSlider = GameObject.Find("bossHealth");
             bossName = GameObject.Find("name").GetComponent<TextMeshProUGUI>();
             healthSlider = GameObject.Find("bossHealth").GetComponent<Slider>();
@@ -70,6 +79,16 @@ public class EnemyController : MonoBehaviour
             hitAudio = GameObject.Find("werewolf-dying").GetComponent<AudioSource>();
             deadAudio = GameObject.Find("werewolf-dying").GetComponent<AudioSource>();
             healthSlider.maxValue = 40;
+            rootSlider.SetActive(false);
+        }else if (enemy == 3)
+        {
+            rootSlider = GameObject.Find("bossHealth");
+            bossName = GameObject.Find("name").GetComponent<TextMeshProUGUI>();
+            healthSlider = GameObject.Find("bossHealth").GetComponent<Slider>();
+            alertAudio = GameObject.Find("werewolf-alert").GetComponent<AudioSource>();
+            hitAudio = GameObject.Find("werewolf-dying").GetComponent<AudioSource>();
+            deadAudio = GameObject.Find("werewolf-dying").GetComponent<AudioSource>();
+            healthSlider.maxValue = 70;
             rootSlider.SetActive(false);
         }
         startPoint = transform.position;
@@ -101,17 +120,23 @@ public class EnemyController : MonoBehaviour
                 alreadyDead = true;
                 if (enemy == 1)
                 {
-                    EventController.instance.boss1Defeated = true;
+                    arrow1.SetActive(true);
+                    event1.boss1Defeated = true;
+                    UIController.instance.objDesc.text = "Use the car to in the garage to escape";
                     rootSlider.SetActive(false);
                 }
                 else if (enemy == 2)
                 {
-
+                    arrow2.SetActive(true);
+                    event1.boss2Defeated = true;
+                    UIController.instance.objDesc.text = "Get into the orange car to escape";
                     rootSlider.SetActive(false);
                 }
                 else if (enemy == 3)
                 {
-
+                    arrowFinal.SetActive(true);
+                    event1.boss3Defeated = true;
+                    UIController.instance.objDesc.text = "Destroy the box near the 3 crashes cars to escape";
                     rootSlider.SetActive(false);
                 }
             }
